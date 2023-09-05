@@ -59,24 +59,6 @@ root.geometry(f"{scale}x{scale}")
 
 # Make pixels
 root.setPixel(range(6,10),range(5,10),"red")
-root.setPixel(range(5,7),[10,4],"dark red")
-root.setPixel(range(7,10),4)
-root.setPixel([7,9],10)
-root.setPixel(8,10,"grey")
-root.setPixel(10,[10,4],"dark red")
-root.setPixel(range(10,12),5,"dark red")
-root.setPixel(range(10,12),9,"dark red")
-root.setPixel(12,[5,6,8,9])
-root.setPixel(13,range(6,9))
-root.setPixel(5,range(5,9))
-root.setPixel(4,range(9,11),"grey")
-root.setPixel(4,range(4,6),"grey")
-root.setPixel([10,11],range(6,9),"red")
-root.setPixel(5,[5,9],"red")
-root.setPixel(12,7,"dark red")
-
-root.setPixel(4,[14,15],"grey")
-root.setPixel(range(5,8),[13,16],"dark red")
 
 
 root.resizable(False, False)
