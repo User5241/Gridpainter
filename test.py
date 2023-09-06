@@ -37,7 +37,7 @@ class Grid(CTk):
                 self.Horizontal_Lines.append(horizontal_line)
 
 
-    def setPixel(self, x, y, color="white"):
+    def setPixel(self, x, y, color="white", ow=False):
         
         if hasattr(x, '__iter__'):
             iterx = x
@@ -50,8 +50,10 @@ class Grid(CTk):
         for x in iterx:
             for y in itery:
                 pixel = CTkFrame(master=self, width=30, height=30, fg_color=color, bg_color="black")
-                pixel.place(y=y*30+2,x=x*30+2)
-                self.pixels.append(pixel)
+                if [x,y] not in self.pixels or ow:
+                    if not ow:
+                        self.pixels.append([x,y])
+                    pixel.place(y=y*30+2,x=x*30+2)
 
 root = Grid(gridsize, gridsize)
 root.title("Gridpainter")
