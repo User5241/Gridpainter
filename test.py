@@ -51,7 +51,7 @@ class Grid(CTk):
         if __debug__:
             for x in range(self.columns):
                 for y in range(self.rows):
-                    marker = CTkLabel(master=self, width=30, height=30, fg_color="white", bg_color="transparent", text=str(x)+","+str(y), font=("Arial", 9), justify=CENTER, text_color="white", anchor=CENTER)
+                    marker = CTkLabel(master=self, width=30, height=30, fg_color="transparent", bg_color="transparent", text=str(x)+","+str(y), font=("Arial", 9), justify=CENTER, text_color="white", anchor=CENTER)
                     marker.place(y=(y*30)+2,x=(x*30)+4)
                     self.grid['markers'][f"{x}:{y}"] = marker
 
