@@ -1,21 +1,8 @@
 from customtkinter import *
-from rich.traceback import install; install(show_locals=True)
+from utils import *
 import json
-import time
-from functools import wraps
+from rich.traceback import install; install(show_locals=True)
 
-class Timer(object):
-    """docstring for Timer"""
-    def __init__(self):
-        super(Timer, self).__init__()
-        self.start = None
-        self.stop = None
-
-    def __enter__(self):
-        self.start = time.perf_counter()
-
-    def __exit__(self, *args, **kwargs):
-        print(f" done in: {time.perf_counter() - self.start}")
 
 class GridMarker(CTkFrame):
     def __init__(self, cls, *args, **kwargs):
@@ -51,7 +38,7 @@ class Grid(CTk):
         if __debug__:
             for x in range(self.columns):
                 for y in range(self.rows):
-                    marker = CTkLabel(master=self, width=30, height=30, fg_color="transparent", bg_color="transparent", text=str(x)+","+str(y), font=("Arial", 9), justify=CENTER, text_color="white", anchor=CENTER)
+                    marker = CTkLabel(master=self, width=30, height=30, fg_color="white", bg_color="transparent", text=str(x)+","+str(y), font=("Arial", 9), justify=CENTER, text_color="white", anchor=CENTER)
                     marker.place(y=(y*30)+2,x=(x*30)+4)
                     self.grid['markers'][f"{x}:{y}"] = marker
 
@@ -73,28 +60,33 @@ class Grid(CTk):
                 pixel = GridMarker(self, fg_color=color)
                 pixel.place(y=y*30+2,x=x*30+2)
                 self.grid['pixels'][f"{x}:{y}"] = pixel
-
+    # TODO get working
     @classmethod
-    def load_screen(fp):
-        grid = json.loads(fp)
-        rows = grid.get('rows')
-        col = grid.get('col')
-        scale = grid.get('scale')
-        return Grid(rows, col, scale)
+    def load_screen(self, grid: dict):
+        """
+        The grid file is a json formatted file structured like:
+        {
+            "rows": int,
+            "col": int,
+            "scale": int,
+            "pixels": {
+                "x:y": "color",
+            },
+        }
+        """
+        pixels = grid.pop('pixels')
+        g = Grid(grid.pop('rows'), grid.pop('col'), (grid.pop('scale')*30)+4)
+        for pixel in pixels:
+            x, y = pixel.split(':')
+            g.setPixel(int(x), int(y), color=pixels.get(pixel))
+        return g
                 
-gridsize=24 #Change this for the size of the grid
+gridsize=25 #Change this for the size of the grid
 scale=(gridsize*30)+4
-with Timer():
-    root = Grid(gridsize, gridsize, title="Gridpainter", scale=scale)
 
 with Timer():
-    for x, y in zip(range(10), range(10)):
-        root.setPixel(x,y, 'black')
-with Timer():
-    root.setPixel(range(1,10,2), range(4), 'blue')
-
-with Timer():
-    root.setPixel([1,3,5,7,9,11,13,15,17,19], [1,3,5,7,9,11,13,15,17,19], "green")
+    with open("grid.json") as fp:
+        root = Grid.load_screen(json.load(fp))
 
 root.resizable(False, False)
 root.mainloop()
